@@ -1,10 +1,10 @@
-import { Document, model, Schema } from "mongoose"
+import { Document, model, Schema } from "mongoose";
 
 export interface IPost extends Document {
-  email: string
-  content: string
-  likedBy: string[]
-  comments: Comment[]
+  email: string;
+  content: string;
+  likedBy: string[];
+  comments: Comment[];
 }
 
 export const postSchema = new Schema({
@@ -18,6 +18,6 @@ export const postSchema = new Schema({
       createdAt: { type: Date, default: Date.now },
     },
   ],
-})
+});
 
-export const PostModel = model<IPost>("Post", postSchema)
+export const PostModel = model<IPost>("Post", postSchema);

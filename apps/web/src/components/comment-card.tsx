@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Icons } from "@/components/icons"
-import { useAuth } from "@/components/useAuth"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Icons } from "@/components/icons";
+import { useAuth } from "@/components/useAuth";
 
 interface Comment {
-  _id: string
-  email: string
-  content: string
-  date: Date
+  _id: string;
+  email: string;
+  content: string;
+  date: Date;
 }
 
 export function PostCommentCard({
@@ -20,27 +20,27 @@ export function PostCommentCard({
   _id,
   onCommentDeleted,
 }: Comment & { onCommentDeleted: (postId: string) => void }) {
-  const [role, setRole] = useState("")
-  const { user } = useAuth()
+  const [role, setRole] = useState("");
+  const { user } = useAuth();
 
   useEffect(() => {
-    fetchUser()
-  }, [])
+    fetchUser();
+  }, []);
 
   async function fetchUser() {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_NESTJS_SERVER}/role?email=${user?.email}`
-      )
-      const result = await response.json()
+      );
+      const result = await response.json();
 
       if (result.success) {
-        setRole(result.role)
+        setRole(result.role);
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 250))
+      await new Promise((resolve) => setTimeout(resolve, 250));
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -66,5 +66,5 @@ export function PostCommentCard({
         <p>{content}</p>
       </CardContent>
     </Card>
-  )
+  );
 }

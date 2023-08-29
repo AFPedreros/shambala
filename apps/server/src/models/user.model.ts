@@ -1,8 +1,8 @@
-import { Document, model, Schema } from "mongoose"
+import { Document, model, Schema } from "mongoose";
 
 export interface IUser extends Document {
-  email: string
-  role: "admin" | "regular"
+  email: string;
+  role: "admin" | "regular";
 }
 
 export const userSchema = new Schema({
@@ -13,6 +13,6 @@ export const userSchema = new Schema({
     enum: ["admin", "regular"],
     default: "regular",
   },
-})
+});
 
-export const User = model<IUser>("User", userSchema)
+export const User = model<IUser>("User", userSchema);

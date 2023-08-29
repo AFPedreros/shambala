@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "next/link";
 
 import {
   Card,
@@ -7,9 +7,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Shell } from "@/components/shell"
-import { SignUpForm } from "@/components/signup-form"
+} from "@/components/ui/card";
+import { Shell } from "@/components/shell";
+import { SignUpForm } from "@/components/signup-form";
 
 export default function SignUpPage() {
   return (
@@ -41,5 +41,5 @@ export default function SignUpPage() {
         </CardFooter>
       </Card>
     </Shell>
-  )
+  );
 }

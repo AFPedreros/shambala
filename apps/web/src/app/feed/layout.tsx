@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
-import { httpBatchLink } from "@trpc/client"
-import { trpc } from "@web/src/app/trpc"
+import React, { useState } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { httpBatchLink } from "@trpc/client";
+import { trpc } from "@web/src/app/trpc";
 
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { BottomBarNav } from "@/components/bottombar-nav"
-import { SidebarNav } from "@/components/sidebar-nav"
-import { SiteHeader } from "@/components/site-header"
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { BottomBarNav } from "@/components/bottombar-nav";
+import { SidebarNav } from "@/components/sidebar-nav";
+import { SiteHeader } from "@/components/site-header";
 
 interface PostsLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export default function PostsLayout({ children }: PostsLayoutProps) {
-  const [queryClient] = useState(() => new QueryClient())
+  const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
@@ -25,7 +25,7 @@ export default function PostsLayout({ children }: PostsLayoutProps) {
         }),
       ],
     })
-  )
+  );
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
@@ -44,5 +44,5 @@ export default function PostsLayout({ children }: PostsLayoutProps) {
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </trpc.Provider>
-  )
+  );
 }

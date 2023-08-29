@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import React, { useEffect, useState } from "react"
-import Link from "next/link"
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
-import { buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button";
 
 export default function Home() {
   return (
@@ -12,5 +12,5 @@ export default function Home() {
         Ver posts
       </Link>
     </section>
-  )
+  );
 }

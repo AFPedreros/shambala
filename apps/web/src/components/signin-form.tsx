@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import type { z } from "zod"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import type { z } from "zod";
 
-import { authSchema } from "@/lib/auth"
-import { useStore } from "@/lib/store"
-import { useToast } from "@/hooks/use-toast"
-import { Button } from "@/components/ui/button"
+import { authSchema } from "@/lib/auth";
+import { useStore } from "@/lib/store";
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -17,20 +17,20 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Icons } from "@/components/icons"
-import { PasswordInput } from "@/components/password-input"
-import { useAuth } from "@/components/useAuth"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Icons } from "@/components/icons";
+import { PasswordInput } from "@/components/password-input";
+import { useAuth } from "@/components/useAuth";
 
-type Inputs = z.infer<typeof authSchema>
+type Inputs = z.infer<typeof authSchema>;
 
 export function SignInForm() {
-  const { toast } = useToast()
-  const { signIn } = useAuth()
-  const { setRole } = useStore()
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
+  const { toast } = useToast();
+  const { signIn } = useAuth();
+  const { setRole } = useStore();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<Inputs>({
     resolver: zodResolver(authSchema),
@@ -38,50 +38,50 @@ export function SignInForm() {
       email: "",
       password: "",
     },
-  })
+  });
 
   async function onSubmit(data: Inputs) {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      await signIn(data.email, data.password)
+      await signIn(data.email, data.password);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_NESTJS_SERVER}/role?email=${data.email}`
-      )
-      const result = await response.json()
-      console.log(result)
+      );
+      const result = await response.json();
+      console.log(result);
 
       if (result.success) {
-        setRole(result.role)
+        setRole(result.role);
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 250))
+      await new Promise((resolve) => setTimeout(resolve, 250));
     } catch (error) {
-      const firebaseError = error as { code?: string }
+      const firebaseError = error as { code?: string };
       switch (firebaseError.code) {
         case "auth/wrong-password":
           toast({
             variant: "destructive",
             title: "Error",
             description: "Contraseña incorrecta",
-          })
-          break
+          });
+          break;
         case "auth/user-not-found":
           toast({
             variant: "destructive",
             title: "Error",
             description: "No se encontró un usuario con ese correo electrónico",
-          })
-          break
+          });
+          break;
         default:
           toast({
             variant: "destructive",
             title: "Error",
             description: "Ocurrió un error al iniciar sesión",
-          })
+          });
       }
     } finally {
-      setIsLoading(false)
-      router.push("/feed")
+      setIsLoading(false);
+      router.push("/feed");
     }
   }
 
@@ -129,5 +129,5 @@ export function SignInForm() {
         </Button>
       </form>
     </Form>
-  )
+  );
 }

@@ -1,7 +1,7 @@
-import { SiteHeader } from "@/components/site-header"
+import { SiteHeader } from "@/components/site-header";
 
 interface LobbyLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export default async function LobbyLayout({ children }: LobbyLayoutProps) {
@@ -10,5 +10,5 @@ export default async function LobbyLayout({ children }: LobbyLayoutProps) {
       <SiteHeader />
       <main className="flex-1">{children}</main>
     </div>
-  )
+  );
 }

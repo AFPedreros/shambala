@@ -1,42 +1,42 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useQueryClient } from "@tanstack/react-query"
-import { trpc } from "@web/src/app/trpc"
+import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { trpc } from "@web/src/app/trpc";
 
-import { useToast } from "@/hooks/use-toast"
-import { Button } from "@/components/ui/button"
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
-import { Toggle } from "@/components/ui/toggle"
-import { PostCommentCard } from "@/components/comment-card"
-import { DialogComment } from "@/components/dialog-comment"
-import { Icons } from "@/components/icons"
-import { useAuth } from "@/components/useAuth"
+} from "@/components/ui/collapsible";
+import { Toggle } from "@/components/ui/toggle";
+import { PostCommentCard } from "@/components/comment-card";
+import { DialogComment } from "@/components/dialog-comment";
+import { Icons } from "@/components/icons";
+import { useAuth } from "@/components/useAuth";
 
 interface Comment {
-  _id: string
-  email: string
-  content: string
-  createdAt: Date
+  _id: string;
+  email: string;
+  content: string;
+  createdAt: Date;
 }
 
 interface Post {
-  _id: string
-  email: string
-  content: string
-  likedBy: string[]
-  comments: Comment[]
+  _id: string;
+  email: string;
+  content: string;
+  likedBy: string[];
+  comments: Comment[];
 }
 
 export function PostCard({
@@ -48,76 +48,76 @@ export function PostCard({
   onPostDeleted,
   userEmail,
 }: Post & { onPostDeleted: (postId: string) => void; userEmail: string }) {
-  const { toast } = useToast()
-  const [role, setRole] = useState("")
-  const { user } = useAuth()
-  const queryClient = useQueryClient()
-  const [isOpen, setIsOpen] = useState(false)
-  const [likes, setLikes] = useState(likedBy.length)
-  const [hasLiked, setHasLiked] = useState(likedBy.includes(userEmail))
+  const { toast } = useToast();
+  const [role, setRole] = useState("");
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const [isOpen, setIsOpen] = useState(false);
+  const [likes, setLikes] = useState(likedBy.length);
+  const [hasLiked, setHasLiked] = useState(likedBy.includes(userEmail));
   const mutationLikePost = trpc.likePost.useMutation({
     onSuccess: () => {
-      queryClient.refetchQueries()
+      queryClient.refetchQueries();
     },
-  })
+  });
   const mutationDeletePost = trpc.deletePost.useMutation({
     onSuccess: () => {
-      queryClient.refetchQueries()
+      queryClient.refetchQueries();
     },
-  })
+  });
   const mutationDeleteComment = trpc.deleteComment.useMutation({
     onSuccess: () => {
-      queryClient.refetchQueries()
+      queryClient.refetchQueries();
     },
-  })
+  });
   const mutationUnlikePost = trpc.unlikePost.useMutation({
     onSuccess: () => {
-      queryClient.refetchQueries()
+      queryClient.refetchQueries();
     },
-  })
+  });
 
   //   console.log(mutationDeletePost)
 
   useEffect(() => {
-    fetchUser()
-  }, [])
+    fetchUser();
+  }, []);
 
   async function fetchUser() {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_NESTJS_SERVER}/role?email=${user?.email}`
-      )
-      const result = await response.json()
+      );
+      const result = await response.json();
 
       if (result.success) {
-        setRole(result.role)
+        setRole(result.role);
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 250))
+      await new Promise((resolve) => setTimeout(resolve, 250));
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
   const handleDelete = async () => {
     try {
-      mutationDeletePost.mutate({ _id })
+      mutationDeletePost.mutate({ _id });
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Error",
         description: "Ocurrió un error al eliminar el post",
-      })
+      });
     }
-  }
+  };
 
   async function handleLike() {
     try {
       if (hasLiked) {
         // const response = await trpc.unlikePost.mutate({ _id, userEmail })
-        mutationUnlikePost.mutate({ _id, userEmail })
-        setLikes((prevLikes) => prevLikes - 1)
-        setHasLiked(false)
+        mutationUnlikePost.mutate({ _id, userEmail });
+        setLikes((prevLikes) => prevLikes - 1);
+        setHasLiked(false);
         // if (mutationDeleteComment.isSuccess) {
         //   setLikes((prevLikes) => prevLikes - 1)
         //   setHasLiked(false)
@@ -130,9 +130,9 @@ export function PostCard({
         // }
       } else {
         // const response = await trpc.likePost.mutate({ _id, userEmail })
-        mutationLikePost.mutate({ _id, userEmail })
-        setLikes((prevLikes) => prevLikes + 1)
-        setHasLiked(true)
+        mutationLikePost.mutate({ _id, userEmail });
+        setLikes((prevLikes) => prevLikes + 1);
+        setHasLiked(true);
         // if (mutationLikePost.isSuccess) {
         //   setLikes((prevLikes) => prevLikes + 1)
         //   setHasLiked(true)
@@ -149,7 +149,7 @@ export function PostCard({
         variant: "destructive",
         title: "Error",
         description: "Ocurrió un error al actualizar el like",
-      })
+      });
     }
   }
 
@@ -159,8 +159,8 @@ export function PostCard({
       //     postId: _id,
       //     commentId,
       //   })
-      mutationDeleteComment.mutate({ postId: _id, commentId })
-      toast({ title: "Comentario eliminado" })
+      mutationDeleteComment.mutate({ postId: _id, commentId });
+      toast({ title: "Comentario eliminado" });
       // if (mutationDeleteComment.isSuccess) {
       //   toast({ title: "Comentario eliminado" })
       // } else {
@@ -176,17 +176,17 @@ export function PostCard({
       //   })
       // }
     } catch (error) {
-      console.error("Error deleting comment:", error)
+      console.error("Error deleting comment:", error);
       const deletedComment = comments.find(
         (comment) => comment._id === commentId
-      )
+      );
       if (deletedComment) {
       }
       toast({
         variant: "destructive",
         title: "Error",
         description: "Ocurrió un error al eliminar el comentario",
-      })
+      });
     }
   }
 
@@ -261,5 +261,5 @@ export function PostCard({
         </Collapsible>
       </CardFooter>
     </Card>
-  )
+  );
 }

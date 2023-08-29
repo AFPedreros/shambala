@@ -1,4 +1,4 @@
-import * as z from "zod"
+import * as z from "zod";
 
 export const authSchema = z.object({
   email: z.string().email({
@@ -14,4 +14,4 @@ export const authSchema = z.object({
       message:
         "La contraseña debe contener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial",
     }),
-})
+});

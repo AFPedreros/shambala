@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import Link from "next/link"
+import Link from "next/link";
 
-import { buttonVariants } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
+import { buttonVariants } from "@/components/ui/button";
+import { Icons } from "@/components/icons";
 
-import { DialogPost } from "./dialog-post"
+import { DialogPost } from "./dialog-post";
 
 export function BottomBarNav() {
   return (
@@ -18,5 +18,5 @@ export function BottomBarNav() {
         <DialogPost />
       </div>
     </div>
-  )
+  );
 }

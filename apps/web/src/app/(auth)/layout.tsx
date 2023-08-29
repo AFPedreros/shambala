@@ -1,23 +1,23 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { httpBatchLink } from "@trpc/client"
-import { trpc } from "@web/src/app/trpc"
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { httpBatchLink } from "@trpc/client";
+import { trpc } from "@web/src/app/trpc";
 
-import { siteConfig } from "@/config/site"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { Icons } from "@/components/icons"
+import { siteConfig } from "@/config/site";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Icons } from "@/components/icons";
 
 interface AuthLayoutProps {
-  children: React.ReactNode
-  showHeader: boolean
+  children: React.ReactNode;
+  showHeader: boolean;
 }
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
-  const [queryClient] = useState(() => new QueryClient())
+  const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
@@ -26,7 +26,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         }),
       ],
     })
-  )
+  );
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
@@ -54,5 +54,5 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         </main>
       </QueryClientProvider>
     </trpc.Provider>
-  )
+  );
 }

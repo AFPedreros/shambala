@@ -1,42 +1,42 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { trpc } from "@web/src/app/trpc"
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { trpc } from "@web/src/app/trpc";
 
-import { PostCard } from "@/components/post-card"
-import { useAuth } from "@/components/useAuth"
+import { PostCard } from "@/components/post-card";
+import { useAuth } from "@/components/useAuth";
 
 interface Comment {
-  _id: string
-  email: string
-  content: string
-  createdAt: Date
+  _id: string;
+  email: string;
+  content: string;
+  createdAt: Date;
 }
 
 interface Post {
-  _id: string
-  email: string
-  content: string
-  likedBy: string[]
-  comments: Comment[]
+  _id: string;
+  email: string;
+  content: string;
+  likedBy: string[];
+  comments: Comment[];
 }
 
 export default function PostsPage() {
-  const { user } = useAuth()
-  const router = useRouter()
-  const [posts, setPosts] = useState<Post[]>([])
-  const [loading, setLoading] = useState(true)
+  const { user } = useAuth();
+  const router = useRouter();
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
   const { isLoading, isError, data, error } = trpc.getPosts.useQuery({
     queryKey: "getPosts",
-  })
+  });
 
   // console.log(data)
 
-  const [initialLoad, setInitialLoad] = useState(true)
+  const [initialLoad, setInitialLoad] = useState(true);
 
   function handlePostDeleted(postId: string) {
-    setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId))
+    setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
   }
 
   // async function fetchPosts() {
@@ -60,19 +60,19 @@ export default function PostsPage() {
   // }, []);
 
   useEffect(() => {
-    if (user == null) router.push("/iniciar-sesion")
-  }, [user])
+    if (user == null) router.push("/iniciar-sesion");
+  }, [user]);
 
   if (isLoading) {
-    return <span>Loading...</span>
+    return <span>Loading...</span>;
   }
 
   if (isError) {
-    return <span>Error: {error.message}</span>
+    return <span>Error: {error.message}</span>;
   }
 
   if (data) {
-    const postsData = data as Post[]
+    const postsData = data as Post[];
     return (
       <section className="flex flex-col items-center gap-4 overflow-hidden py-24">
         {postsData.map((post) =>
@@ -90,6 +90,6 @@ export default function PostsPage() {
           ) : null
         )}
       </section>
-    )
+    );
   }
 }

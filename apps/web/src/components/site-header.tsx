@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import Link from "next/link"
+import Link from "next/link";
 
-import { siteConfig } from "@/config/site"
-import { Button, buttonVariants } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
-import { useAuth } from "@/components/useAuth"
+import { siteConfig } from "@/config/site";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Icons } from "@/components/icons";
+import { useAuth } from "@/components/useAuth";
 
 export function SiteHeader() {
-  const { user, logout } = useAuth()
+  const { user, logout } = useAuth();
 
   async function handleLogout() {
     try {
-      await logout()
+      await logout();
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   }
 
@@ -50,5 +50,5 @@ export function SiteHeader() {
         </div>
       </div>
     </header>
-  )
+  );
 }

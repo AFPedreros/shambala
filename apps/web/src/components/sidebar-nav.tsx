@@ -1,23 +1,23 @@
-"use client"
+"use client";
 
-import Link from "next/link"
+import Link from "next/link";
 
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
+import { Icons } from "@/components/icons";
 
-import { DialogPost } from "./dialog-post"
+import { DialogPost } from "./dialog-post";
 
 export interface SidebarNavItem {
-  icon?: keyof typeof Icons
-  href?: string
-  title: string
-  external?: boolean
-  disabled?: boolean
+  icon?: keyof typeof Icons;
+  href?: string;
+  title: string;
+  external?: boolean;
+  disabled?: boolean;
 }
 
 export interface SidebarNavProps extends React.HTMLAttributes<HTMLDivElement> {
-  className: string
+  className: string;
 }
 
 export function SidebarNav({ className }: SidebarNavProps) {
@@ -29,5 +29,5 @@ export function SidebarNav({ className }: SidebarNavProps) {
       </Link>
       <DialogPost />
     </div>
-  )
+  );
 }

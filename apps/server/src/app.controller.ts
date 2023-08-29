@@ -1,9 +1,9 @@
-import { Controller, Get, Query } from "@nestjs/common"
-import { InjectModel } from "@nestjs/mongoose"
-import { IUser } from "@server/models/user.model"
-import { Model } from "mongoose"
+import { Controller, Get, Query } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { IUser } from "@server/models/user.model";
+import { Model } from "mongoose";
 
-import { AppService } from "./app.service"
+import { AppService } from "./app.service";
 
 @Controller()
 export class AppController {
@@ -14,15 +14,15 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    return this.appService.getHello()
+    return this.appService.getHello();
   }
 
   @Get("role")
   async getUserRole(@Query("email") email: string) {
-    const user = await this.userModel.findOne({ email })
+    const user = await this.userModel.findOne({ email });
     if (!user) {
-      return { success: false, message: "User not found" }
+      return { success: false, message: "User not found" };
     }
-    return { success: true, role: user.role }
+    return { success: true, role: user.role };
   }
 }
