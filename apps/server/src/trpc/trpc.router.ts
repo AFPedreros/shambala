@@ -76,10 +76,16 @@ export class TrpcRouter {
         }
       }),
 
-    getPosts: this.trpc.procedure.query(async () => {
-      const posts = await this.postModel.find().exec()
-      return posts
-    }),
+    getPosts: this.trpc.procedure
+      .input(
+        z.object({
+          queryKey: z.string().default("getPosts"),
+        })
+      )
+      .query(async ({ input }) => {
+        const posts = await this.postModel.find().exec()
+        return posts
+      }),
 
     deletePost: this.trpc.procedure
       .input(

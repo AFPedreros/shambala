@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useQueryClient } from "@tanstack/react-query"
 import { trpc } from "@web/src/app/trpc"
 
 import { useToast } from "@/hooks/use-toast"
@@ -38,27 +39,44 @@ interface Post {
   comments: Comment[]
 }
 
-export function PostCard(
-  {
-    _id,
-    email,
-    content,
-    likedBy,
-    comments,
-    onPostDeleted,
-    userEmail,
-  }: Post & { onPostDeleted: (postId: string) => void; userEmail: string }
-) {
+export function PostCard({
+  _id,
+  email,
+  content,
+  likedBy,
+  comments,
+  onPostDeleted,
+  userEmail,
+}: Post & { onPostDeleted: (postId: string) => void; userEmail: string }) {
   const { toast } = useToast()
   const [role, setRole] = useState("")
   const { user } = useAuth()
+  const queryClient = useQueryClient()
   const [isOpen, setIsOpen] = useState(false)
   const [likes, setLikes] = useState(likedBy.length)
   const [hasLiked, setHasLiked] = useState(likedBy.includes(userEmail))
-  const mutationLikePost = trpc.likePost.useMutation()
-  const mutationDeletePost = trpc.deletePost.useMutation()
-  const mutationDeleteComment = trpc.deleteComment.useMutation()
-  const mutationUnlikePost = trpc.unlikePost.useMutation()
+  const mutationLikePost = trpc.likePost.useMutation({
+    onSuccess: () => {
+      queryClient.refetchQueries()
+    },
+  })
+  const mutationDeletePost = trpc.deletePost.useMutation({
+    onSuccess: () => {
+      queryClient.refetchQueries()
+    },
+  })
+  const mutationDeleteComment = trpc.deleteComment.useMutation({
+    onSuccess: () => {
+      queryClient.refetchQueries()
+    },
+  })
+  const mutationUnlikePost = trpc.unlikePost.useMutation({
+    onSuccess: () => {
+      queryClient.refetchQueries()
+    },
+  })
+
+  //   console.log(mutationDeletePost)
 
   useEffect(() => {
     fetchUser()
@@ -83,18 +101,7 @@ export function PostCard(
 
   const handleDelete = async () => {
     try {
-      //   const response = await trpc.deletePost.mutate({ _id })
       mutationDeletePost.mutate({ _id })
-      if (mutationDeletePost.isSuccess) {
-        toast({ title: "Post eliminado" })
-        onPostDeleted(_id)
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "No se pudo eliminar el post",
-        })
-      }
     } catch (error) {
       toast({
         variant: "destructive",
@@ -109,29 +116,33 @@ export function PostCard(
       if (hasLiked) {
         // const response = await trpc.unlikePost.mutate({ _id, userEmail })
         mutationUnlikePost.mutate({ _id, userEmail })
-        if (mutationDeleteComment.isSuccess) {
-          setLikes((prevLikes) => prevLikes - 1)
-          setHasLiked(false)
-        } else {
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: "No se pudo quitar el like al post",
-          })
-        }
+        setLikes((prevLikes) => prevLikes - 1)
+        setHasLiked(false)
+        // if (mutationDeleteComment.isSuccess) {
+        //   setLikes((prevLikes) => prevLikes - 1)
+        //   setHasLiked(false)
+        // } else {
+        //   toast({
+        //     variant: "destructive",
+        //     title: "Error",
+        //     description: "No se pudo quitar el like al post",
+        //   })
+        // }
       } else {
         // const response = await trpc.likePost.mutate({ _id, userEmail })
         mutationLikePost.mutate({ _id, userEmail })
-        if (mutationLikePost.isSuccess) {
-          setLikes((prevLikes) => prevLikes + 1)
-          setHasLiked(true)
-        } else {
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: "No se pudo dar like al post",
-          })
-        }
+        setLikes((prevLikes) => prevLikes + 1)
+        setHasLiked(true)
+        // if (mutationLikePost.isSuccess) {
+        //   setLikes((prevLikes) => prevLikes + 1)
+        //   setHasLiked(true)
+        // } else {
+        //   toast({
+        //     variant: "destructive",
+        //     title: "Error",
+        //     description: "No se pudo dar like al post",
+        //   })
+        // }
       }
     } catch (error) {
       toast({
@@ -149,20 +160,21 @@ export function PostCard(
       //     commentId,
       //   })
       mutationDeleteComment.mutate({ postId: _id, commentId })
-      if (mutationDeleteComment.isSuccess) {
-        toast({ title: "Comentario eliminado" })
-      } else {
-        const deletedComment = comments.find(
-          (comment) => comment._id === commentId
-        )
-        if (deletedComment) {
-        }
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "No se pudo eliminar el comentario",
-        })
-      }
+      toast({ title: "Comentario eliminado" })
+      // if (mutationDeleteComment.isSuccess) {
+      //   toast({ title: "Comentario eliminado" })
+      // } else {
+      //   const deletedComment = comments.find(
+      //     (comment) => comment._id === commentId
+      //   )
+      //   if (deletedComment) {
+      //   }
+      //   toast({
+      //     variant: "destructive",
+      //     title: "Error",
+      //     description: "No se pudo eliminar el comentario",
+      //   })
+      // }
     } catch (error) {
       console.error("Error deleting comment:", error)
       const deletedComment = comments.find(

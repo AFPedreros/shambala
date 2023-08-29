@@ -2,6 +2,7 @@
 
 import React, { useState } from "react"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { httpBatchLink } from "@trpc/client"
 import { trpc } from "@web/src/app/trpc"
 
@@ -40,6 +41,7 @@ export default function PostsLayout({ children }: PostsLayoutProps) {
           </div>
           <BottomBarNav />
         </div>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </trpc.Provider>
   )

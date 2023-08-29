@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
+import { useQueryClient } from "@tanstack/react-query"
 import { trpc } from "@web/src/app/trpc"
 
 import { useToast } from "@/hooks/use-toast"
@@ -25,9 +26,14 @@ interface DialogCommentProps {
 export function DialogComment({ postId, comments }: DialogCommentProps) {
   const { user } = useAuth()
   const { toast } = useToast()
+  const queryClient = useQueryClient()
   const contentRef = useRef<HTMLTextAreaElement>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const mutation = trpc.addCommentToPost.useMutation()
+  const mutation = trpc.addCommentToPost.useMutation({
+    onSuccess: () => {
+      queryClient.refetchQueries()
+    },
+  })
 
   async function onSubmit() {
     const content = contentRef.current?.value

@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
+import { useQueryClient } from "@tanstack/react-query"
 import { trpc } from "@web/src/app/trpc"
 
 import { useToast } from "@/hooks/use-toast"
@@ -22,7 +23,12 @@ export function DialogPost() {
   const { toast } = useToast()
   const contentRef = useRef<HTMLTextAreaElement>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const mutation = trpc.createPost.useMutation()
+  const queryClient = useQueryClient()
+  const mutation = trpc.createPost.useMutation({
+    onSuccess: () => {
+      queryClient.refetchQueries()
+    },
+  })
 
   async function onSubmit() {
     const content = contentRef.current?.value
@@ -31,6 +37,7 @@ export function DialogPost() {
     setIsLoading(true)
     try {
       mutation.mutate({ email: user?.email || "", content })
+
       if (contentRef.current) contentRef.current.value = ""
     } catch (error) {
       console.log(error)

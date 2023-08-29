@@ -81,7 +81,7 @@ export function SignInForm() {
       }
     } finally {
       setIsLoading(false)
-      router.push("/Feed")
+      router.push("/feed")
     }
   }
 

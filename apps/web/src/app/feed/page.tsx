@@ -27,9 +27,11 @@ export default function PostsPage() {
   const router = useRouter()
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
-  const { isLoading, isError, data, error } = trpc.getPosts.useQuery()
+  const { isLoading, isError, data, error } = trpc.getPosts.useQuery({
+    queryKey: "getPosts",
+  })
 
-  console.log(data)
+  // console.log(data)
 
   const [initialLoad, setInitialLoad] = useState(true)
 
