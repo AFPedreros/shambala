@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.json", // Extend the config options from the root
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
     "declaration": true,

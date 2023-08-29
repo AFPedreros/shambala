@@ -1,10 +1,11 @@
-'use client';
-import { Icons } from '@/components/icons';
+"use client"
+
+import { Icons } from "@/components/icons"
 
 export default function loading() {
-    return (
-        <div className="relative flex w-screen justify-center items-center min-h-screen">
-            <Icons.loader className="w-12 h-12 text-black animate-spin" />
-        </div>
-    );
+  return (
+    <div className="relative flex min-h-screen w-screen items-center justify-center">
+      <Icons.loader className="h-12 w-12 animate-spin text-black" />
+    </div>
+  )
 }

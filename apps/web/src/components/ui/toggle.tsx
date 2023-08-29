@@ -31,11 +31,11 @@ const toggleVariants = cva(
 const Toggle = React.forwardRef<
   React.ElementRef<typeof TogglePrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> &
-  VariantProps<typeof toggleVariants> & { isActive?: boolean }
+    VariantProps<typeof toggleVariants> & { isActive?: boolean }
 >(({ className, variant, size, isActive, ...props }, ref) => (
   <TogglePrimitive.Root
     ref={ref}
-    data-state={isActive ? "on" : "off"} // Establecer el estado inicial basado en isActive
+    data-state={isActive ? "on" : "off"}
     className={cn(toggleVariants({ variant, size, className }))}
     {...props}
   />
