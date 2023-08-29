@@ -1,6 +1,6 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-	name: 'Prueba Shambala',
-	description: 'App para ',
+	name: 'Shambala',
+	description: 'App Social para subir post',
 };
