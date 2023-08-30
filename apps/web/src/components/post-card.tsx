@@ -1,11 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { trpc } from "@web/src/app/trpc";
 
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import {
   Card,
   CardContent,
@@ -22,7 +32,7 @@ import { Toggle } from "@/components/ui/toggle";
 import { PostCommentCard } from "@/components/comment-card";
 import { DialogComment } from "@/components/dialog-comment";
 import { Icons } from "@/components/icons";
-import { useAuth } from "@/components/useAuth";
+import { useStore } from "@/lib/store";
 
 interface Comment {
   _id: string;
@@ -49,8 +59,7 @@ export function PostCard({
   userEmail,
 }: Post & { onPostDeleted: (postId: string) => void; userEmail: string }) {
   const { toast } = useToast();
-  const [role, setRole] = useState("");
-  const { user } = useAuth();
+  const role = useStore((state) => state.role);
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
   const [likes, setLikes] = useState(likedBy.length);
@@ -76,32 +85,10 @@ export function PostCard({
     },
   });
 
-  //   console.log(mutationDeletePost)
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
-  async function fetchUser() {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_NESTJS_SERVER}/role?email=${user?.email}`
-      );
-      const result = await response.json();
-
-      if (result.success) {
-        setRole(result.role);
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, 250));
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   const handleDelete = async () => {
     try {
       mutationDeletePost.mutate({ _id });
+      toast({ title: "Post eliminado correctamente" });
     } catch (error) {
       toast({
         variant: "destructive",
@@ -114,35 +101,13 @@ export function PostCard({
   async function handleLike() {
     try {
       if (hasLiked) {
-        // const response = await trpc.unlikePost.mutate({ _id, userEmail })
         mutationUnlikePost.mutate({ _id, userEmail });
         setLikes((prevLikes) => prevLikes - 1);
         setHasLiked(false);
-        // if (mutationDeleteComment.isSuccess) {
-        //   setLikes((prevLikes) => prevLikes - 1)
-        //   setHasLiked(false)
-        // } else {
-        //   toast({
-        //     variant: "destructive",
-        //     title: "Error",
-        //     description: "No se pudo quitar el like al post",
-        //   })
-        // }
       } else {
-        // const response = await trpc.likePost.mutate({ _id, userEmail })
         mutationLikePost.mutate({ _id, userEmail });
         setLikes((prevLikes) => prevLikes + 1);
         setHasLiked(true);
-        // if (mutationLikePost.isSuccess) {
-        //   setLikes((prevLikes) => prevLikes + 1)
-        //   setHasLiked(true)
-        // } else {
-        //   toast({
-        //     variant: "destructive",
-        //     title: "Error",
-        //     description: "No se pudo dar like al post",
-        //   })
-        // }
       }
     } catch (error) {
       toast({
@@ -155,26 +120,8 @@ export function PostCard({
 
   async function handleCommentDeleted(commentId: string) {
     try {
-      //   const response = await trpc.deleteComment.mutate({
-      //     postId: _id,
-      //     commentId,
-      //   })
       mutationDeleteComment.mutate({ postId: _id, commentId });
-      toast({ title: "Comentario eliminado" });
-      // if (mutationDeleteComment.isSuccess) {
-      //   toast({ title: "Comentario eliminado" })
-      // } else {
-      //   const deletedComment = comments.find(
-      //     (comment) => comment._id === commentId
-      //   )
-      //   if (deletedComment) {
-      //   }
-      //   toast({
-      //     variant: "destructive",
-      //     title: "Error",
-      //     description: "No se pudo eliminar el comentario",
-      //   })
-      // }
+      toast({ title: "Comentario eliminado correctamente" });
     } catch (error) {
       console.error("Error deleting comment:", error);
       const deletedComment = comments.find(
@@ -190,23 +137,34 @@ export function PostCard({
     }
   }
 
-  // console.log(role)
   return (
     <Card className="w-full sm:w-[550px]">
       <CardHeader className="relative">
-        <CardTitle>{email}</CardTitle>
+        <CardTitle className="tracking-wide">{email}</CardTitle>
         {role === "admin" ? (
-          <Button
-            variant={"ghost"}
-            size={"icon"}
-            className="absolute right-0 top-0 cursor-pointer"
-            onClick={handleDelete}
-          >
-            <Icons.trash
-              className="text-destructive h-4 w-4"
-              aria-hidden="true"
-            />
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant={"ghost"}
+                size={"icon"}
+                className="absolute right-0 top-0 cursor-pointer"
+              >
+                <Icons.trash
+                  className="text-destructive h-4 w-4"
+                  aria-hidden="true"
+                />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>¿Estás seguro que quieres borrar este post?</AlertDialogTitle>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction className="bg-destructive hover:bg-destructive/90" onClick={handleDelete}>Continuar</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         ) : null}
       </CardHeader>
       <CardContent>

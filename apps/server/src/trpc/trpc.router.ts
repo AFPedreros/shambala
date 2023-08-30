@@ -37,7 +37,6 @@ export class TrpcRouter {
         })
       )
       .mutation(async ({ input }) => {
-        console.log(input);
         const newUser = new this.userModel({
           email: input.email,
           role: input.role,

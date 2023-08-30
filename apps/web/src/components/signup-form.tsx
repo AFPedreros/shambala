@@ -45,8 +45,11 @@ export function SignUpForm() {
     try {
       await signUp(data.email, data.password);
       mutation.mutate({ email: data.email, role: "regular" });
+      await new Promise((resolve) => setTimeout(resolve, 250));
     } catch (error) {
+
       const firebaseError = error as { code?: string };
+
       switch (firebaseError.code) {
         case "auth/email-already-in-use":
           toast({

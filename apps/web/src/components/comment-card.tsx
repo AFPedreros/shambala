@@ -1,11 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icons } from "@/components/icons";
-import { useAuth } from "@/components/useAuth";
+import { useStore } from "@/lib/store";
 
 interface Comment {
   _id: string;
@@ -20,46 +28,36 @@ export function PostCommentCard({
   _id,
   onCommentDeleted,
 }: Comment & { onCommentDeleted: (postId: string) => void }) {
-  const [role, setRole] = useState("");
-  const { user } = useAuth();
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
-  async function fetchUser() {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_NESTJS_SERVER}/role?email=${user?.email}`
-      );
-      const result = await response.json();
-
-      if (result.success) {
-        setRole(result.role);
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, 250));
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const role = useStore((state) => state.role);
 
   return (
     <Card className="w-full">
       <CardHeader className="relative">
-        <CardTitle>{email}</CardTitle>
+        <CardTitle className="tracking-wide">{email}</CardTitle>
         {role === "admin" ? (
-          <Button
-            variant={"ghost"}
-            size={"icon"}
-            className="absolute right-0 top-0 cursor-pointer"
-            onClick={() => onCommentDeleted(_id)}
-          >
-            <Icons.trash
-              className="text-destructive h-4 w-4"
-              aria-hidden="true"
-            />
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant={"ghost"}
+                size={"icon"}
+                className="absolute right-0 top-0 cursor-pointer"
+              >
+                <Icons.trash
+                  className="text-destructive h-4 w-4"
+                  aria-hidden="true"
+                />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>¿Estás seguro que quieres borrar este comentario?</AlertDialogTitle>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction className="bg-destructive hover:bg-destructive/90" onClick={() => onCommentDeleted(_id)}>Continuar</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         ) : null}
       </CardHeader>
       <CardContent>

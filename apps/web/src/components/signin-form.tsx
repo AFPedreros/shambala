@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
 import { authSchema } from "@/lib/auth";
-import { useStore } from "@/lib/store";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,7 +27,6 @@ type Inputs = z.infer<typeof authSchema>;
 export function SignInForm() {
   const { toast } = useToast();
   const { signIn } = useAuth();
-  const { setRole } = useStore();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -44,16 +42,6 @@ export function SignInForm() {
     setIsLoading(true);
     try {
       await signIn(data.email, data.password);
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_NESTJS_SERVER}/role?email=${data.email}`
-      );
-      const result = await response.json();
-      console.log(result);
-
-      if (result.success) {
-        setRole(result.role);
-      }
-
       await new Promise((resolve) => setTimeout(resolve, 250));
     } catch (error) {
       const firebaseError = error as { code?: string };

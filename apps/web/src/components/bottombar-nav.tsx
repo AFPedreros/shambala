@@ -13,7 +13,7 @@ export function BottomBarNav() {
       <div className="container flex h-16 items-center justify-between px-16">
         <Link href="/" className={buttonVariants({ variant: "ghost" })}>
           <Icons.home className="mr-2 h-4 w-4" aria-hidden="true" />
-          <span className="text-primary">Feed</span>
+          <span className="text-primary">Inicio</span>
         </Link>
         <DialogPost />
       </div>

@@ -31,8 +31,6 @@ export default function PostsPage() {
     queryKey: "getPosts",
   });
 
-  // console.log(data)
-
   const [initialLoad, setInitialLoad] = useState(true);
 
   function handlePostDeleted(postId: string) {
@@ -59,9 +57,9 @@ export default function PostsPage() {
   //     fetchPosts();
   // }, []);
 
-  useEffect(() => {
-    if (user == null) router.push("/iniciar-sesion");
-  }, [user]);
+  // useEffect(() => {
+  //   if (user == null) router.push("/iniciar-sesion");
+  // }, [user]);
 
   if (isLoading) {
     return <span>Loading...</span>;
