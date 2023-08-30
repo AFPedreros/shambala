@@ -1,6 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Comment } from "@/types";
+
+import { useStore } from "@/lib/store";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,17 +12,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icons } from "@/components/icons";
-import { useStore } from "@/lib/store";
-
-interface Comment {
-  _id: string;
-  email: string;
-  content: string;
-  date: Date;
-}
 
 export function PostCommentCard({
   email,
@@ -50,11 +45,18 @@ export function PostCommentCard({
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>¿Estás seguro que quieres borrar este comentario?</AlertDialogTitle>
+                <AlertDialogTitle>
+                  ¿Estás seguro que quieres borrar este comentario?
+                </AlertDialogTitle>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                <AlertDialogAction className="bg-destructive hover:bg-destructive/90" onClick={() => onCommentDeleted(_id)}>Continuar</AlertDialogAction>
+                <AlertDialogAction
+                  className="bg-destructive hover:bg-destructive/90"
+                  onClick={() => onCommentDeleted(_id)}
+                >
+                  Continuar
+                </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>

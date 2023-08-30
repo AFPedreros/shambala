@@ -12,11 +12,6 @@ export class AppController {
     @InjectModel("User") private readonly userModel: Model<IUser>
   ) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
-
   @Get("role")
   async getUserRole(@Query("email") email: string) {
     const user = await this.userModel.findOne({ email });

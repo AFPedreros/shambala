@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { Post } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { trpc } from "@web/src/app/trpc";
 
+import { useStore } from "@/lib/store";
 import { useToast } from "@/hooks/use-toast";
-import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,7 +16,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -32,22 +34,6 @@ import { Toggle } from "@/components/ui/toggle";
 import { PostCommentCard } from "@/components/comment-card";
 import { DialogComment } from "@/components/dialog-comment";
 import { Icons } from "@/components/icons";
-import { useStore } from "@/lib/store";
-
-interface Comment {
-  _id: string;
-  email: string;
-  content: string;
-  createdAt: Date;
-}
-
-interface Post {
-  _id: string;
-  email: string;
-  content: string;
-  likedBy: string[];
-  comments: Comment[];
-}
 
 export function PostCard({
   _id,
@@ -55,9 +41,8 @@ export function PostCard({
   content,
   likedBy,
   comments,
-  onPostDeleted,
   userEmail,
-}: Post & { onPostDeleted: (postId: string) => void; userEmail: string }) {
+}: Post & { userEmail: string }) {
   const { toast } = useToast();
   const role = useStore((state) => state.role);
   const queryClient = useQueryClient();
@@ -157,11 +142,18 @@ export function PostCard({
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>¿Estás seguro que quieres borrar este post?</AlertDialogTitle>
+                <AlertDialogTitle>
+                  ¿Estás seguro que quieres borrar este post?
+                </AlertDialogTitle>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                <AlertDialogAction className="bg-destructive hover:bg-destructive/90" onClick={handleDelete}>Continuar</AlertDialogAction>
+                <AlertDialogAction
+                  className="bg-destructive hover:bg-destructive/90"
+                  onClick={handleDelete}
+                >
+                  Continuar
+                </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
@@ -210,7 +202,7 @@ export function PostCard({
                 key={comment._id}
                 email={comment.email}
                 content={comment.content}
-                date={comment.createdAt}
+                date={comment.date}
                 _id={comment._id}
                 onCommentDeleted={() => handleCommentDeleted(comment._id)}
               />

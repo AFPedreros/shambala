@@ -47,7 +47,6 @@ export function SignUpForm() {
       mutation.mutate({ email: data.email, role: "regular" });
       await new Promise((resolve) => setTimeout(resolve, 250));
     } catch (error) {
-
       const firebaseError = error as { code?: string };
 
       switch (firebaseError.code) {

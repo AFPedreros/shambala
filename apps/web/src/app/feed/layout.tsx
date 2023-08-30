@@ -1,18 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { redirect } from "next/navigation";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { httpBatchLink } from "@trpc/client";
 import { trpc } from "@web/src/app/trpc";
 
+import { useStore } from "@/lib/store";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { BottomBarNav } from "@/components/bottombar-nav";
 import { SidebarNav } from "@/components/sidebar-nav";
 import { SiteHeader } from "@/components/site-header";
-import { redirect } from "next/navigation"
 import { useAuth } from "@/components/useAuth";
-import { useStore } from "@/lib/store";
 
 interface PostsLayoutProps {
   children: React.ReactNode;
@@ -23,7 +23,7 @@ export default function PostsLayout({ children }: PostsLayoutProps) {
   const setRole = useStore((state) => state.setRole);
 
   if (!user) {
-    redirect("/iniciar-sesion")
+    redirect("/iniciar-sesion");
   }
 
   useEffect(() => {
@@ -40,7 +40,6 @@ export default function PostsLayout({ children }: PostsLayoutProps) {
       if (result.success) {
         setRole(result.role);
       }
-
     } catch (error) {
       console.log(error);
     }

@@ -6,7 +6,7 @@ import { siteConfig } from "@/config/site";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { useAuth } from "@/components/useAuth";
-import { UserAvatar } from "@/components/user-avatar"
+import { UserAvatar } from "@/components/user-avatar";
 
 export function SiteHeader() {
   const { user, logout } = useAuth();
@@ -32,9 +32,6 @@ export function SiteHeader() {
           </Link>
           <>
             {user ? (
-              // <Button size={"sm"} onClick={handleLogout}>
-              //   Cerrar sesión
-              // </Button>
               <UserAvatar />
             ) : (
               <Link href="/iniciar-sesion">
