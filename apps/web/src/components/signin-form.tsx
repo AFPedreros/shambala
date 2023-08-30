@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
@@ -20,7 +21,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Icons } from "@/components/icons";
 import { PasswordInput } from "@/components/password-input";
-import { useAuth } from "@/components/useAuth";
 
 type Inputs = z.infer<typeof authSchema>;
 
@@ -43,6 +43,7 @@ export function SignInForm() {
     try {
       await signIn(data.email, data.password);
       await new Promise((resolve) => setTimeout(resolve, 250));
+      router.push("/feed");
     } catch (error) {
       const firebaseError = error as { code?: string };
       switch (firebaseError.code) {
@@ -69,7 +70,6 @@ export function SignInForm() {
       }
     } finally {
       setIsLoading(false);
-      router.push("/feed");
     }
   }
 

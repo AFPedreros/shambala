@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 
 import { siteConfig } from "@/config/site";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
-import { useAuth } from "@/components/useAuth";
 import { UserAvatar } from "@/components/user-avatar";
 
 export function SiteHeader() {

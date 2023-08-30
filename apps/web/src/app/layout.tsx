@@ -1,11 +1,12 @@
 import "@/styles/globals.css";
 
+import { AuthContextProvider } from "@/context/AuthContext";
+
 import { siteConfig } from "@/config/site";
 import { fontHeading, fontMono, fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
-import { AuthContextProvider } from "@/components/useAuth";
 
 export const metadata = {
   title: siteConfig.name,

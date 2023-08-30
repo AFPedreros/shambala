@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { trpc } from "@web/src/app/trpc";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
@@ -21,7 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Icons } from "@/components/icons";
 import { PasswordInput } from "@/components/password-input";
-import { useAuth } from "@/components/useAuth";
+import { trpc } from "@/app/trpc";
 
 type Inputs = z.infer<typeof authSchema>;
 
@@ -29,7 +29,6 @@ export function SignUpForm() {
   const { toast } = useToast();
   const { signUp } = useAuth();
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
   const mutation = trpc.createUser.useMutation();
 
   const form = useForm<Inputs>({
@@ -41,11 +40,11 @@ export function SignUpForm() {
   });
 
   async function onSubmit(data: Inputs) {
-    setIsLoading(true);
     try {
       await signUp(data.email, data.password);
       mutation.mutate({ email: data.email, role: "regular" });
       await new Promise((resolve) => setTimeout(resolve, 250));
+      router.push("/feed");
     } catch (error) {
       const firebaseError = error as { code?: string };
 
@@ -64,9 +63,6 @@ export function SignUpForm() {
             description: "Ocurrió un error al iniciar sesión",
           });
       }
-    } finally {
-      setIsLoading(false);
-      router.push("/feed");
     }
   }
 

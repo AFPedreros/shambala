@@ -4,15 +4,15 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
-import { trpc } from "@web/src/app/trpc";
 
 import { cn } from "@/lib/utils";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
-import { useAuth } from "@/components/useAuth";
+import { trpc } from "@/app/trpc";
 
 interface AuthLayoutProps {
   children: React.ReactNode;

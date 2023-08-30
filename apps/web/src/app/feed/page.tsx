@@ -1,10 +1,10 @@
 "use client";
 
+import { useAuth } from "@/context/AuthContext";
 import { Post } from "@/types";
-import { trpc } from "@web/src/app/trpc";
 
 import { PostCard } from "@/components/post-card";
-import { useAuth } from "@/components/useAuth";
+import { trpc } from "@/app/trpc";
 
 export default function PostsPage() {
   const { user } = useAuth();

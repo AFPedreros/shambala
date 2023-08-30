@@ -2,17 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { httpBatchLink } from "@trpc/client";
-import { trpc } from "@web/src/app/trpc";
 
 import { useStore } from "@/lib/store";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { BottomBarNav } from "@/components/bottombar-nav";
 import { SidebarNav } from "@/components/sidebar-nav";
 import { SiteHeader } from "@/components/site-header";
-import { useAuth } from "@/components/useAuth";
+import { trpc } from "@/app/trpc";
 
 interface PostsLayoutProps {
   children: React.ReactNode;

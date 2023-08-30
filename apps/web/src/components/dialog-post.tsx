@@ -1,9 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { useQueryClient } from "@tanstack/react-query";
-import { trpc } from "@web/src/app/trpc";
 
 import { useToast } from "@/hooks/use-toast";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Icons } from "@/components/icons";
-import { useAuth } from "@/components/useAuth";
+import { trpc } from "@/app/trpc";
 
 export function DialogPost() {
   const { user } = useAuth();

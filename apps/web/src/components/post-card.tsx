@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Post } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
-import { trpc } from "@web/src/app/trpc";
 
 import { useStore } from "@/lib/store";
 import { useToast } from "@/hooks/use-toast";
@@ -34,6 +33,7 @@ import { Toggle } from "@/components/ui/toggle";
 import { PostCommentCard } from "@/components/comment-card";
 import { DialogComment } from "@/components/dialog-comment";
 import { Icons } from "@/components/icons";
+import { trpc } from "@/app/trpc";
 
 export function PostCard({
   _id,
