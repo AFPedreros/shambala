@@ -2,7 +2,9 @@
 
 import { useAuth } from "@/context/AuthContext";
 import { Post } from "@/types";
+import { motion } from "framer-motion";
 
+import { postContainerVariants, postVariants } from "@/lib/anim";
 import { PostCard } from "@/components/post-card";
 import { trpc } from "@/app/trpc";
 
@@ -23,21 +25,32 @@ export default function PostsPage() {
   if (data) {
     const postsData = data as Post[];
     return (
-      <section className="flex flex-col items-center gap-4 overflow-hidden py-24">
+      <motion.section
+        className="flex flex-col items-center gap-4 overflow-hidden py-24"
+        variants={postContainerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {postsData.map((post) =>
           user && user.email ? (
-            <PostCard
+            <motion.div
               key={post._id}
-              _id={post._id}
-              email={post.email}
-              content={post.content}
-              likedBy={post.likedBy}
-              comments={post.comments}
-              userEmail={user.email}
-            />
+              exit={{ opacity: 0 }}
+              variants={postVariants}
+            >
+              <PostCard
+                key={post._id}
+                _id={post._id}
+                email={post.email}
+                content={post.content}
+                likedBy={post.likedBy}
+                comments={post.comments}
+                userEmail={user.email}
+              />
+            </motion.div>
           ) : null
         )}
-      </section>
+      </motion.section>
     );
   }
 }

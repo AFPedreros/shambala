@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { Post } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
+import { AnimatePresence, motion } from "framer-motion";
 
+import { commentsContainerVariants, commentVariants } from "@/lib/anim";
 import { useStore } from "@/lib/store";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -49,28 +51,32 @@ export function PostCard({
   const [isOpen, setIsOpen] = useState(false);
   const [likes, setLikes] = useState(likedBy.length);
   const [hasLiked, setHasLiked] = useState(likedBy.includes(userEmail));
+
   const mutationLikePost = trpc.likePost.useMutation({
     onSuccess: () => {
       queryClient.refetchQueries();
     },
   });
+
   const mutationDeletePost = trpc.deletePost.useMutation({
     onSuccess: () => {
       queryClient.refetchQueries();
     },
   });
+
   const mutationDeleteComment = trpc.deleteComment.useMutation({
     onSuccess: () => {
       queryClient.refetchQueries();
     },
   });
+
   const mutationUnlikePost = trpc.unlikePost.useMutation({
     onSuccess: () => {
       queryClient.refetchQueries();
     },
   });
 
-  const handleDelete = async () => {
+  async function handleDelete() {
     try {
       mutationDeletePost.mutate({ _id });
       toast({ title: "Post eliminado correctamente" });
@@ -81,7 +87,7 @@ export function PostCard({
         description: "Ocurrió un error al eliminar el post",
       });
     }
-  };
+  }
 
   async function handleLike() {
     try {
@@ -175,7 +181,11 @@ export function PostCard({
                 onClick={handleLike}
                 isActive={hasLiked}
               >
-                <Icons.heart className="mr-1" aria-hidden="true" />
+                {hasLiked ? (
+                  <Icons.heartFilled className="mr-1" aria-hidden="true" />
+                ) : (
+                  <Icons.heart className="mr-1" aria-hidden="true" />
+                )}
                 {likes}
               </Toggle>
               <DialogComment comments={comments.length} postId={_id} />
@@ -196,18 +206,32 @@ export function PostCard({
               <p className="text-border text-sm">No hay comentarios</p>
             )}
           </div>
-          <CollapsibleContent className="space-y-2">
-            {comments.map((comment) => (
-              <PostCommentCard
-                key={comment._id}
-                email={comment.email}
-                content={comment.content}
-                date={comment.date}
-                _id={comment._id}
-                onCommentDeleted={() => handleCommentDeleted(comment._id)}
-              />
-            ))}
-          </CollapsibleContent>
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                variants={commentsContainerVariants}
+                initial="closed"
+                animate="open"
+                exit="closed"
+              >
+                <CollapsibleContent className="space-y-2">
+                  {comments.map((comment) => (
+                    <motion.div key={comment._id} variants={commentVariants}>
+                      <PostCommentCard
+                        email={comment.email}
+                        content={comment.content}
+                        date={comment.date}
+                        _id={comment._id}
+                        onCommentDeleted={() =>
+                          handleCommentDeleted(comment._id)
+                        }
+                      />
+                    </motion.div>
+                  ))}
+                </CollapsibleContent>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </Collapsible>
       </CardFooter>
     </Card>

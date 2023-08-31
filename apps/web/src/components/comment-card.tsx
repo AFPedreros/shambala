@@ -1,7 +1,9 @@
 "use client";
 
 import { Comment } from "@/types";
+import { AnimatePresence, motion } from "framer-motion";
 
+import { commentExit } from "@/lib/anim";
 import { useStore } from "@/lib/store";
 import {
   AlertDialog,
