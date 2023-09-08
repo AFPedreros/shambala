@@ -63,7 +63,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
               <p className="font-semibold tracking-wide">Regresar al incio</p>
             </Link>
           </AspectRatio>
-          <div className="container absolute top-1/2 col-span-1 flex -translate-y-1/2 items-center lg:static lg:top-0 lg:col-span-1 lg:flex lg:translate-y-0">
+          <div className="absolute top-1/2 col-span-1 flex w-full -translate-y-1/2 items-center lg:static lg:top-0 lg:col-span-1 lg:translate-y-0">
             {children}
           </div>
         </main>

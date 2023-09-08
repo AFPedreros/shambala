@@ -1,9 +1,7 @@
 "use client";
 
 import { Comment } from "@/types";
-import { AnimatePresence, motion } from "framer-motion";
 
-import { commentExit } from "@/lib/anim";
 import { useStore } from "@/lib/store";
 import {
   AlertDialog,
@@ -21,17 +19,21 @@ import { Icons } from "@/components/icons";
 
 export function PostCommentCard({
   email,
+  userEmail,
   content,
   _id,
   onCommentDeleted,
-}: Comment & { onCommentDeleted: (postId: string) => void }) {
+}: Comment & {
+  onCommentDeleted: (postId: string) => void;
+  userEmail: string;
+}) {
   const role = useStore((state) => state.role);
 
   return (
     <Card className="w-full">
       <CardHeader className="relative">
         <CardTitle className="tracking-wide">{email}</CardTitle>
-        {role === "admin" ? (
+        {role === "admin" || userEmail === email ? (
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button

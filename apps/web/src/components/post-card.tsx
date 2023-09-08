@@ -5,7 +5,7 @@ import { Post } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { commentsContainerVariants, commentVariants } from "@/lib/anim";
+import { cardVariants, commentsContainerVariants } from "@/lib/anim";
 import { useStore } from "@/lib/store";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -129,10 +129,10 @@ export function PostCard({
   }
 
   return (
-    <Card className="w-full sm:w-[550px]">
+    <Card className="w-full md:w-[550px]">
       <CardHeader className="relative">
         <CardTitle className="tracking-wide">{email}</CardTitle>
-        {role === "admin" ? (
+        {role === "admin" || userEmail === email ? (
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button
@@ -182,7 +182,10 @@ export function PostCard({
                 isActive={hasLiked}
               >
                 {hasLiked ? (
-                  <Icons.heartFilled className="mr-1" aria-hidden="true" />
+                  <Icons.heartFilled
+                    className="mr-1 text-red-500"
+                    aria-hidden="true"
+                  />
                 ) : (
                   <Icons.heart className="mr-1" aria-hidden="true" />
                 )}
@@ -215,19 +218,28 @@ export function PostCard({
                 exit="closed"
               >
                 <CollapsibleContent className="space-y-2">
-                  {comments.map((comment) => (
-                    <motion.div key={comment._id} variants={commentVariants}>
-                      <PostCommentCard
-                        email={comment.email}
-                        content={comment.content}
-                        date={comment.date}
-                        _id={comment._id}
-                        onCommentDeleted={() =>
-                          handleCommentDeleted(comment._id)
-                        }
-                      />
-                    </motion.div>
-                  ))}
+                  <AnimatePresence>
+                    {comments.map((comment) => (
+                      <motion.div
+                        key={comment._id}
+                        variants={cardVariants}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                      >
+                        <PostCommentCard
+                          email={comment.email}
+                          userEmail={userEmail}
+                          content={comment.content}
+                          date={comment.date}
+                          _id={comment._id}
+                          onCommentDeleted={() =>
+                            handleCommentDeleted(comment._id)
+                          }
+                        />
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
                 </CollapsibleContent>
               </motion.div>
             )}

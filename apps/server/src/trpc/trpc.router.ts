@@ -73,6 +73,45 @@ export class TrpcRouter {
         return posts;
       }),
 
+    getInfinitePosts: this.trpc.procedure
+      .input(
+        z.object({
+          queryKey: z.string().default("getInfinitePosts"),
+          limit: z.number().min(1).max(100).nullish(),
+          cursor: z.string().nullish(),
+        })
+      )
+      .query(async (opts) => {
+        const { input } = opts;
+        const limit = input.limit ?? 50;
+        const cursor = input.cursor;
+
+        const query = cursor ? { _id: { $lt: cursor } } : {};
+
+        const items = await this.postModel
+          .find(query)
+          .sort({ _id: -1 })
+          .limit(limit + 1)
+          .exec();
+
+        let nextCursor: typeof cursor | undefined = undefined;
+        if (items.length > limit) {
+          nextCursor = items[limit - 1]._id.toString();
+          items.pop();
+        }
+
+        const test = await this.postModel
+          .find(query)
+          .sort({ _id: -1 })
+          .limit(limit + 1)
+          .exec();
+
+        return {
+          items,
+          nextCursor,
+        };
+      }),
+
     deletePost: this.trpc.procedure
       .input(
         z.object({
